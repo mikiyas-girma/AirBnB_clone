@@ -4,7 +4,6 @@
 
 import unittest
 from models.base_model import BaseModel
-import sys
 import datetime
 
 
@@ -14,6 +13,12 @@ class TestBase(unittest.TestCase):
     def setUp(self):
         self.model = BaseModel()
         self.model.name = "JIT"
+
+    def TearDown(self):
+        '''
+            deleting instance.
+        '''
+        del self.model
 
     def test_id_type(self):
         """check id type is string"""
@@ -29,10 +34,12 @@ class TestBase(unittest.TestCase):
         self.assertEqual("JIT", self.model.name)
 
     def test_first_equal(self):
+        """at first created_at and updated_at time is equal"""
         self.assertEqual(self.model.updated_at.date,
                          self.model.created_at.date)
 
     def test_after_update(self):
+        """check after updation date will not be the same"""
         old_update = self.model.updated_at
         self.model.save()
         self.assertNotEqual(self.model.updated_at.date, old_update)
