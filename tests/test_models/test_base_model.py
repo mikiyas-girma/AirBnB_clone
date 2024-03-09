@@ -36,3 +36,20 @@ class TestBase(unittest.TestCase):
         old_update = self.model.updated_at
         self.model.save()
         self.assertNotEqual(self.model.updated_at.date, old_update)
+
+    def test_diff_instance(self):
+        """test that two model are not the same instance"""
+        dict_model = self.model.to_dict()
+        new_model = BaseModel(dict_model)
+        self.assertNotEqual(self.model, new_model)
+
+    def test_date_type(self):
+        """test both created_at and update_at type are datetime"""
+        dict_model = self.model.to_dict()
+        new_model = BaseModel(dict_model)
+        self.assertTrue(isinstance(new_model.created_at, datetime.datetime))
+        self.assertTrue(isinstance(new_model.updated_at, datetime.datetime))
+
+    def test_dict_class(self):
+        """check the __class__ key exists in dict """
+        self.assertEqual('BaseModel', (self.model.to_dict())["__class__"])
