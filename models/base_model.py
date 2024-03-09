@@ -21,11 +21,14 @@ class BaseModel:
         """returns a dictionary consisting of all key and values
             contained in BaseModel instance along with class name
         """
+        dic = {}
         for key, value in self.__dict__.items():
             if isinstance(value, datetime):
-                self.__dict__.__setitem__(key, value.isoformat())
-        self.__dict__.__setitem__('__class__', self.__class__.__name__)
-        return self.__dict__
+                dic[key] = value.isoformat()
+            else:
+                dic[key] = value
+            dic['__class__'] = self.__class__.__name__
+        return dic
 
     def __str__(self):
         """returns a custom string representation of BaseModel instance"""
