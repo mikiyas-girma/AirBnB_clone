@@ -7,7 +7,7 @@ import uuid
 
 class BaseModel:
     """illustrates a base class """
-    def __init__(self):
+    def __init__(self, *args):
         """initializes an instance of a BaseModel class"""
         self.created_at = datetime.now()
         self.updated_at = self.created_at
