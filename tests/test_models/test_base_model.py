@@ -60,3 +60,14 @@ class TestBase(unittest.TestCase):
     def test_dict_class(self):
         """check the __class__ key exists in dict """
         self.assertEqual('BaseModel', (self.model.to_dict())["__class__"])
+
+    def test_str_representation(self):
+        """test the custom string representation of BaseModel instance"""
+        cls_name = self.model.__class__.__name__
+        exp_str = f"[{cls_name}] ({self.model.id}) {self.model.__dict__}"
+        self.assertEqual(str(self.model), exp_str)
+
+    def test_to_dict_return_type(self):
+        """check the return type of to_dict method"""
+        dict_model = self.model.to_dict()
+        self.assertEqual("<class 'dict'>", str(type(dict_model)))
