@@ -52,10 +52,15 @@ class TestBase(unittest.TestCase):
         self.assertNotEqual(self.model, new_model)
 
     def test_date_type(self):
-        """test both created_at and update_at type are datetime"""
+        """test  created_at type is datetime"""
         dict_model = self.model.to_dict()
         new_model = BaseModel(dict_model)
         self.assertTrue(isinstance(new_model.created_at, datetime.datetime))
+
+    def test_date_type(self):
+        """test update_at type is datetime"""
+        dict_model = self.model.to_dict()
+        new_model = BaseModel(dict_model)
         self.assertTrue(isinstance(new_model.updated_at, datetime.datetime))
 
     def test_dict_class(self):
