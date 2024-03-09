@@ -15,9 +15,9 @@ class TestBase(unittest.TestCase):
         self.model.name = "JIT"
 
     def TearDown(self):
-        '''
+        """
             deleting instance.
-        '''
+        """
         del self.model
 
     def test_id_type(self):
