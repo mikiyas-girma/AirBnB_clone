@@ -11,7 +11,7 @@ class BaseModel:
         """initializes an instance of a BaseModel class"""
         self.created_at = datetime.now()
         self.updated_at = self.created_at
-        self.id = uuid.uuid4().hex
+        self.id = str(uuid.uuid4())
 
     def save(self):
         """updates the time an instance is last update"""
