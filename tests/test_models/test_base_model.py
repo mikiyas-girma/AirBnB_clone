@@ -11,6 +11,7 @@ class TestBase(unittest.TestCase):
     """testing the base model class"""
 
     def setUp(self):
+        """initialize test instance"""
         self.model = BaseModel()
         self.model.name = "JIT"
 
