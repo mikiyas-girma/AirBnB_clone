@@ -7,11 +7,20 @@ import uuid
 
 class BaseModel:
     """illustrates a base class """
-    def __init__(self, *args):
+    def __init__(self, *args, **kwargs):
         """initializes an instance of a BaseModel class"""
-        self.created_at = datetime.now()
-        self.updated_at = self.created_at
-        self.id = str(uuid.uuid4())
+
+        if len(kwargs) > 0:
+            for key, value in kwargs.items():
+                if key != "__class__":
+                    if key in ('created_at', 'updated_at'):
+                        self.__setattr__(key, datetime.fromisoformat(value))
+                    else:
+                        self.__setattr__(key, value)
+        else:
+            self.created_at = datetime.now()
+            self.updated_at = self.created_at
+            self.id = str(uuid.uuid4())
 
     def save(self):
         """updates the time an instance is last update"""
