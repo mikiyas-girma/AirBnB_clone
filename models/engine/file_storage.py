@@ -26,20 +26,22 @@ class FileStorage:
     def save(self):
         """encodes objects and writes it to json file
         """
+        json_data = {}
+        for key, value in self.__objects.items():
+            json_data[key] = value.to_dict()
         with open(self.__file_path, 'w', encoding='utf-8') as f:
-            json_obj = {}
-            for key, value in self.__objects.items():
-                json_obj[key] = value.to_dict()
-                f.write(json.JSONEncoder().encode(json_obj))
+            json.dump(json_data, f)
 
     def reload(self):
         """decodes from json file to object if the file exists
         """
+        from models.base_model import BaseModel
         if os.path.isfile(self.__file_path):
             with open(self.__file_path, mode='r', encoding='utf-8') as f:
-                file_content = f.readlines()
-            if len(file_content) > 0:
-                file_txt = ''.join(file_content)
-            else:
-                file_txt = '{}'
-            self.__objects = json.JSONDecoder().decode(file_txt)
+                file_content = f.read()
+            if file_content:
+                json_data = json.loads(file_content)
+                for key, value in json_data.items():
+                    class_name, obj_id = key.split('.')
+                    if class_name == "BaseModel":
+                        self.__objects[key] = BaseModel(**value)

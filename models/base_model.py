@@ -39,7 +39,7 @@ class BaseModel:
                 dic[key] = value.isoformat()
             else:
                 dic[key] = value
-            dic['__class__'] = self.__class__.__name__
+        dic['__class__'] = self.__class__.__name__
         return dic
 
     def __str__(self):
