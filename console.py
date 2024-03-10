@@ -48,12 +48,29 @@ class HBNBCommand(cmd.Cmd):
         else:
             if not args[0] in class_list:
                 print("** class doesn't exist **")
-            if len(args) < 2:
+            elif len(args) < 2:
                 print("** instance id missing **")
             elif "{}.{}".format(args[0], args[1]) not in objects:
                 print("** no instance found **")
             else:
-                print(objects["{}.{}".format(args[0],args[1])])
+                print(objects["{}.{}".format(args[0], args[1])])
+
+    def do_destroy(self, args):
+        """usage: <destroy> <classname> <instanceid>"""
+        args = shlex.split(args)
+        objects = storage.all()
+        if len(args) == 0:
+            print("**class name missing **")
+        else:
+            if not args[0] in class_list:
+                print("** class doesn't exist **")
+            elif len(args) < 2:
+                print("** instance id missing **")
+            elif "{}.{}".format(args[0], args[1]) not in objects:
+                print("** no instance found **")
+            else:
+                del objects["{}.{}".format(args[0], args[1])]
+                storage.save()
 
 
 if __name__ == "__main__":
