@@ -105,8 +105,9 @@ class HBNBCommand(cmd.Cmd):
             print("** value missing **")
         elif len(args) > 3 and "{}.{}".format(args[0], args[1]) in objects:
             for obj in storage.all().values():
-                setattr(obj, args[2], args[3])
-                storage.save()
+                if obj.id == args[1]:
+                    setattr(obj, args[2], args[3])
+                    storage.save()
 
 
 if __name__ == "__main__":
