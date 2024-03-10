@@ -91,6 +91,7 @@ class HBNBCommand(cmd.Cmd):
         """
         args = shlex.split(args)
         objects = storage.all()
+        forbidden_attrs = {'id', 'created_at', 'updated_at', '__class__'}
         if len(args) == 0:
             print("** class name missing **")
         elif len(args) == 1 and args[0] not in class_list:
@@ -105,7 +106,7 @@ class HBNBCommand(cmd.Cmd):
             print("** value missing **")
         elif len(args) > 3 and "{}.{}".format(args[0], args[1]) in objects:
             for obj in storage.all().values():
-                if obj.id == args[1]:
+                if obj.id == args[1] and args[2] not in forbidden_attrs:
                     setattr(obj, args[2], args[3])
                     storage.save()
 
