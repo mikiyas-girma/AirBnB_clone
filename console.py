@@ -28,22 +28,32 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     def do_create(self, args):
-        """cmd so function to create BaseModel instance"""
+        """cmd so to function to create BaseModel instance"""
         args = shlex.split(args)
         if len(args) == 0:
             print("** class name missing **")
         else:
             if not args[0] in class_list:
-                print(args[0], "** class doesn't exist **")
-                print("class list: ", class_list)
+                print("** class doesn't exist **")
             else:
                 print(eval(args[0])().id)
                 storage.save()
 
     def do_show(self, args):
+        """usage: <show> <classname> <instanceid>"""
         args = shlex.split(args)
+        objects = storage.all()
         if len(args) == 0:
             print("**class name missing **")
+        else:
+            if not args[0] in class_list:
+                print("** class doesn't exist **")
+            if len(args) < 2:
+                print("** instance id missing **")
+            elif "{}.{}".format(args[0], args[1]) not in objects:
+                print("** no instance found **")
+            else:
+                print(objects["{}.{}".format(args[0],args[1])])
 
 
 if __name__ == "__main__":
