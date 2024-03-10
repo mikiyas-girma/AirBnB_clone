@@ -3,6 +3,7 @@
 
 from datetime import datetime
 import uuid
+from models import storage
 
 
 class BaseModel:
@@ -21,10 +22,12 @@ class BaseModel:
             self.created_at = datetime.now()
             self.updated_at = self.created_at
             self.id = str(uuid.uuid4())
+            storage.new(self)
 
     def save(self):
         """updates the time an instance is last update"""
         self.updated_at = datetime.now()
+        storage.save()
 
     def to_dict(self):
         """returns a dictionary consisting of all key and values
