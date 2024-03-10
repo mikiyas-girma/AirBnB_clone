@@ -27,12 +27,15 @@ class FileStorage:
         """encodes objects and writes it to json file
         """
         with open(self.__file_path, 'w', encoding='utf-8') as f:
-            f.write(json.JSONEncoder().encode(self.__objects))
+            json_obj = {}
+            for key, value in self.__objects.items():
+                json_obj[key] = value.to_dict()
+                f.write(json.JSONEncoder().encode(json_obj))
 
     def reload(self):
         """decodes from json file to object if the file exists
         """
-        if os.path.isfile(self.__file_path) is True:
+        if os.path.isfile(self.__file_path):
             with open(self.__file_path, mode='r', encoding='utf-8') as f:
                 file_content = f.readlines()
             if len(file_content) > 0:
