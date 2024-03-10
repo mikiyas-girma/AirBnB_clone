@@ -72,6 +72,19 @@ class HBNBCommand(cmd.Cmd):
                 del objects["{}.{}".format(args[0], args[1])]
                 storage.save()
 
+    def do_all(self, args):
+        """usage: <all> <class name>  or
+                  <all>
+        """
+        args = shlex.split(args)
+        if len(args) > 0 and args[0] not in class_list:
+            print("** class doesn't exist **")
+        else:
+            objects = []
+            for obj in storage.all().values():
+                objects.append(obj.__str__())
+            print(objects)
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
