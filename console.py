@@ -103,7 +103,7 @@ class HBNBCommand(cmd.Cmd):
             print("** attribute name missing **")
         elif len(args) == 3 and "{}.{}".format(args[0], args[1]) in objects:
             print("** value missing **")
-        elif len(args) == 4 and "{}.{}".format(args[0], args[1]) in objects:
+        elif len(args) > 3 and "{}.{}".format(args[0], args[1]) in objects:
             for obj in storage.all().values():
                 setattr(obj, args[2], args[3])
                 storage.save()
