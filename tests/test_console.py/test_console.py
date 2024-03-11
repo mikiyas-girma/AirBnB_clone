@@ -28,6 +28,13 @@ class TestConsole(unittest.TestCase):
         """Set up test environment"""
         self.console = HBNBCommand()
 
+    def last_write(self, nr=None):
+        """Returns last n output lines"""
+        if nr is None:
+            return self.mock_stdout.write.call_args[0][0]
+        return "".join(map(lambda c: c[0][0],
+                           self.mock_stdout.write.call_args_list[-nr:]))
+
     def test_quit(self):
         """Test quit command"""
         with patch('sys.stdout', new=StringIO()) as f:
