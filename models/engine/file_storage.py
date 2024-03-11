@@ -5,6 +5,7 @@ and deserialization process"""
 
 import json
 import os
+from importlib import import_module
 
 
 class FileStorage:
@@ -13,6 +14,13 @@ class FileStorage:
 
     __file_path = 'obj.json'
     __objects = {}
+
+    def __init__(self):
+        """initializes file storage instance"""
+        self.classes = {
+            'BaseModel': import_module('models.base_model').BaseModel,
+            'User': import_module('models.user').User,
+        }
 
     def all(self):
         """returns all the stored objects"""
@@ -35,13 +43,16 @@ class FileStorage:
     def reload(self):
         """decodes from json file to object if the file exists
         """
-        from models.base_model import BaseModel
+
         if os.path.isfile(self.__file_path):
             with open(self.__file_path, mode='r', encoding='utf-8') as f:
                 file_content = f.read()
+                base_model_objects = {}
             if file_content:
                 json_data = json.loads(file_content)
                 for key, value in json_data.items():
-                    class_name, obj_id = key.split('.')
-                    if class_name == "BaseModel":
-                        self.__objects[key] = BaseModel(**value)
+                    class_name = value['__class__']
+                    if class_name in self.classes.keys():
+                        base_model_objects[key] = self.classes[class_name](
+                            **value)
+                self.__objects = base_model_objects
