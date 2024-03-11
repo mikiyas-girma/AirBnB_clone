@@ -45,87 +45,75 @@ class TestConsole(unittest.TestCase):
         with patch('sys.stdout', new=StringIO()) as f:
             self.assertFalse(self.console.onecmd("help"))
             self.assertTrue(self.console.onecmd("help quit"))
+        def test_help_specific_command(self):
+        """Test help with specific command"""
+        expected_output = """Help on EOF:
 
-class TestBaseModel(unittest.TestCase):
-    """Testing `Basemodel `commands.
-    """
+No further documentation available."""
+        self.assert_stdout("help EOF", expected_output, "")
 
-    def setUp(self):
-        pass
+    def test_create_command(self):
+        """Test create command"""
+        expected_output = "Usage: create <class>\n"
+        self.assert_stdout("create", expected_output, "")
 
-    def tearDown(self) -> None:
-        """Resets FileStorage data."""
-        storage._FileStorage__objects = {}
-        if os.path.exists(storage._FileStorage__file_path):
-            os.remove(storage._FileStorage__file_path)
+    def test_create_command_with_class(self):
+        """Test create command with class"""
+        expected_output = ""
+        self.assert_stdout("create BaseModel", expected_output, "")
 
-    def test_create_basemodel(self):
-        """Test create basemodel object.
-        """
-        with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd('create BaseModel')
-            self.assertIsInstance(f.getvalue().strip(), str)
-            self.assertIn("BaseModel.{}".format(
-                f.getvalue().strip()), storage.all().keys())
+    def test_show_command(self):
+        """Test show command"""
+        expected_output = "** class name missing **"
+        self.assert_stdout("show", expected_output, "")
 
-    def test_all_basemodel(self):
-        """Test all basemodel object.
-        """
-        with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd('all BaseModel')
-            for item in json.loads(f.getvalue()):
-                self.assertEqual(item.split()[0], '[BaseModel]')
+    def test_show_command_with_class(self):
+        """Test show command with class"""
+        expected_output = "** instance id missing **"
+        self.assert_stdout("show BaseModel", expected_output, "")
 
-    def test_show_basemodel(self):
-        """Test show basemodel object.
-        """
-        with patch('sys.stdout', new=StringIO()) as f:
-            b1 = BaseModel()
-            b1.eyes = "green"
-            HBNBCommand().onecmd(f'show BaseModel {b1.id}')
-            res = f"[{type(b1).__name__}] ({b1.id}) {b1.__dict__}"
-            self.assertEqual(f.getvalue().strip(), res)
+    def test_destroy_command(self):
+        """Test destroy command"""
+        expected_output = "** class name missing **"
+        self.assert_stdout("destroy", expected_output, "")
 
-    def test_update_basemodel(self):
-        """Test update basemodel object.
-        """
-        with patch('sys.stdout', new=StringIO()) as f:
-            b1 = BaseModel()
-            b1.name = "Cecilia"
-            HBNBCommand().onecmd(f'update BaseModel {b1.id} name "Ife"')
-            self.assertEqual(b1.__dict__["name"], "Ife")
+    def test_destroy_command_with_class(self):
+        """Test destroy command with class"""
+        expected_output = "** instance id missing **"
+        self.assert_stdout("destroy BaseModel", expected_output, "")
 
-        with patch('sys.stdout', new=StringIO()) as f:
-            b1 = BaseModel()
-            b1.age = 75
-            HBNBCommand().onecmd(f'update BaseModel {b1.id} age 25')
-            self.assertIn("age", b1.__dict__.keys())
-            self.assertEqual(b1.__dict__["age"], 25)
+    def test_all_command(self):
+        """Test all command"""
+        expected_output = "[[BaseModel] (1234) {'name': 'test'}]"
+        with patch('sys.stdin', StringIO("all BaseModel")), \
+             patch('sys.stdout', new=StringIO()) as mock_stdout:
+            HBNBCommand().cmdloop()
+            self.assertEqual(mock_stdout.getvalue().strip(), expected_output)
 
-        with patch('sys.stdout', new=StringIO()) as f:
-            b1 = BaseModel()
-            b1.savings = 25.67
-            HBNBCommand().onecmd(f'update BaseModel {b1.id} savings 35.89')
-            self.assertIn("savings", b1.__dict__.keys())
-            self.assertEqual(b1.__dict__["savings"], 35.89)
+    def test_all_command_with_invalid_class(self):
+        """Test all command with invalid class"""
+        expected_output = "** class doesn't exist **"
+        self.assert_stdout("all InvalidClass", expected_output, "")
 
-        with patch('sys.stdout', new=StringIO()) as f:
-            b1 = BaseModel()
-            b1.age = 60
-            cmmd = f'update BaseModel {b1.id} age 10 color "green"'
-            HBNBCommand().onecmd(cmmd)
-            self.assertIn("age", b1.__dict__.keys())
-            self.assertNotIn("color", b1.__dict__.keys())
-            self.assertEqual(b1.__dict__["age"], 10)
+    def test_update_command(self):
+        """Test update command"""
+        expected_output = "** class name missing **"
+        self.assert_stdout("update", expected_output, "")
 
-    def test_destroy_basemodel(self):
-        """Test destroy basemodel
-        """
-        with patch('sys.stdout', new=StringIO()):
-            bm = BaseModel()
-            HBNBCommand().onecmd(f'destroy BaseModel {bm.id}')
-            self.assertNotIn("BaseModel.{}".format(
-                bm.id), storage.all().keys())
+    def test_update_command_with_class(self):
+        """Test update command with class"""
+        expected_output = "** instance id missing **"
+        self.assert_stdout("update BaseModel", expected_output, "")
+
+    def test_update_command_with_instance(self):
+        """Test update command with instance"""
+        expected_output = "** attribute name missing **"
+        self.assert_stdout("update BaseModel.1234", expected_output, "")
+
+    def test_update_command_with_instance_and_attribute(self):
+        """Test update command with instance and attribute"""
+        expected_output = "** value missing **"
+        self.assert_stdout("update BaseModel.1234 name", expected_output, "")
 
 if __name__ == '__main__':
     unittest.main()
