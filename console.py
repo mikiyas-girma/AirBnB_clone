@@ -3,6 +3,7 @@
 
 import cmd
 import shlex
+import sys
 from models.base_model import BaseModel
 from models.user import User
 from models.amenity import Amenity
@@ -116,6 +117,16 @@ class HBNBCommand(cmd.Cmd):
                 if obj.id == args[1] and args[2] not in forbidden_attrs:
                     setattr(obj, args[2], args[3])
                     storage.save()
+
+    def do_count(self, line):
+        """retrieves the number of instances
+        Usage: <class name>.count() """
+        num = 0
+        from models import storage
+        for keys in storage.all():
+            if keys.__contains__(line):
+                num += 1
+        print(num)
 
     def onecmd(self, line):
         """overriden the default to handle commands containing ."""
