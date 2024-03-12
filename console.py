@@ -117,6 +117,14 @@ class HBNBCommand(cmd.Cmd):
                     setattr(obj, args[2], args[3])
                     storage.save()
 
+    def onecmd(self, line):
+        """overriden the default to handle commands containing ."""
+        if line.__contains__('.'):
+            cmd = line.split('.')[::-1]
+        else:
+            cmd = line.split()
+        return super().onecmd(' '.join(cmd))
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
