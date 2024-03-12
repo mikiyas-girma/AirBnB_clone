@@ -120,6 +120,8 @@ class HBNBCommand(cmd.Cmd):
     def onecmd(self, line):
         """overriden the default to handle commands containing ."""
         if line.__contains__('.'):
+            line = line.strip('()')
+            # print(line)
             cmd = line.split('.')[::-1]
         else:
             cmd = line.split()
