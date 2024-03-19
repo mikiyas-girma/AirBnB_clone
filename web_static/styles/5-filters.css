@@ -1,0 +1,58 @@
+/* styles for filters section */
+
+.filters {
+    height: 70px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* search button style */
+.filters button {
+    font-size: 18px;
+    background-color: #ff5a5f;
+    color: #fff;
+    height: 48px;
+    width: 20%;
+    border: none;
+    border-radius: 4px;
+    float: right;
+    margin: 12px 30px;
+}
+
+.filters button:hover {
+    background-color: rgba(255, 90, 95, .9);
+}
+
+.locations, .amenities {
+    display: inline-block;
+    height: 100%;
+    width: 25%;
+    margin: 0;
+}
+
+.locations{
+    border-right: 1px solid #dddddd;
+    margin:auto;
+}
+
+.filters h4,
+.filters h3 {
+    text-align: left;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.filters h3 {
+    font-size: 16px;
+    font-weight: 600;
+    height: 50%;
+    padding: 15px 0 0 30px;
+}
+
+.filters h4 {
+    font-size: 14px;
+    font-weight: 400;
+    height: 50%;
+    padding: 5px 0 12px 30px;
+}
